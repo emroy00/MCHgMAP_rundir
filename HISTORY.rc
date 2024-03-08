@@ -28,20 +28,22 @@ EXPID:  ./OutputDir/GEOSChem
 # your own customized diagnostic collections as well.
 #==============================================================================
 COLLECTIONS: 'Restart',
-             #'MercuryChem',
-             #'MercuryEmis',
+             'MercuryChem',
+             'MercuryEmis',
              #'MercuryOcean',
-             'SpeciesConc',
+             'SpeciesConcVolDiel',
+             'SpeciesConcVolMonth',
+             'SpeciesConcMassDay',
              #'Budget',
              #'CloudConvFlux',
-             #'DryDep',
+             'DryDep',
              #'LevelEdgeDiags',
-             #'ProdLoss',
+             'ProdLoss',
              #'SatDiagn',
              #'SatDiagnEdge',
-             #'StateMet',
-             #'WetLossConv',
-             #'WetLossLS',
+             'StateMet',
+             'WetLossConv',
+             'WetLossLS',
              #'BoundaryConditions',
 ::
 ###############################################################################
@@ -76,7 +78,7 @@ COLLECTIONS: 'Restart',
                               'Chem_SnowHgLandStored          ',
 ::
 #==============================================================================
-# %%%%% THE SpeciesConc COLLECTION %%%%%
+# %%%%% THE SpeciesConcVolDiel COLLECTION %%%%%
 #
 # GEOS-Chem species concentrations (default = all species)
 #
@@ -85,12 +87,47 @@ COLLECTIONS: 'Restart',
 # Concentrations may be saved out as SpeciesConcVV  [v/v dry air] or
 #                                    SpeciesConcMND [molec/cm3]
 #==============================================================================
-  SpeciesConc.template:       '%y4%m2%d2_%h2%n2z.nc4',
-  SpeciesConc.frequency:      00000100 000000
-  SpeciesConc.duration:       00000100 000000
-  SpeciesConc.mode:           'time-averaged'
-  SpeciesConc.fields:         'SpeciesConcVV_?ALL?           ',
-                              #'SpeciesConcMND_?ALL?          ',
+  SpeciesConcVolDiel.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  SpeciesConcVolDiel.frequency:      00000000 010000
+  SpeciesConcVolDiel.duration:       00000100 000000
+  SpeciesConcVolDiel.mode:           'time-averaged'
+  SpeciesConcVolDiel.levels:         1,
+  SpeciesConcVolDiel.fields:         'SpeciesConcVV_?ALL?           ',
+                                    #'SpeciesConcMND_?ALL?          ',
+::
+#==============================================================================
+# %%%%% THE SpeciesConcVolMonth COLLECTION %%%%%
+#
+# GEOS-Chem species concentrations (default = all species)
+#
+# Available for all simulations
+#
+# Concentrations may be saved out as SpeciesConcVV  [v/v dry air] or
+#                                    SpeciesConcMND [molec/cm3]
+#==============================================================================
+  SpeciesConcVolMonth.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  SpeciesConcVolMonth.frequency:      00000100 000000
+  SpeciesConcVolMonth.duration:       00000100 000000
+  SpeciesConcVolMonth.mode:           'time-averaged'
+  SpeciesConcVolDay.fields:         'SpeciesConcVV_?ALL?           ',
+                                    #'SpeciesConcMND_?ALL?          ',
+::
+#==============================================================================
+# %%%%% THE SpeciesConcMassDay (molec cm-3, local conditions)  COLLECTION %%%%%
+#
+# GEOS-Chem species concentrations (default = all species)
+#
+# Available for all simulations
+#
+# Concentrations may be saved out as SpeciesConcVV  [v/v dry air] or
+#                                    SpeciesConcMND [molec/cm3]
+#==============================================================================
+  SpeciesConcMassDay.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  SpeciesConcMassDay.frequency:      00000001 000000
+  SpeciesConcMassDay.duration:       00000100 000000
+  SpeciesConcMassDay.mode:           'time-averaged'
+  SpeciesConcMassDay.fields:         #'SpeciesConcVV_?ALL?           ',
+                                     'SpeciesConcMND_?ALL?          ',
 ::
 #==============================================================================
 # %%%%% THE Budget COLLECTION %%%%%
@@ -148,7 +185,7 @@ COLLECTIONS: 'Restart',
   DryDep.frequency:           00000100 000000
   DryDep.duration:            00000100 000000
   DryDep.mode:                'time-averaged'
-  DryDep.fields:              'DryDepVel_?DRY?               ',
+  DryDep.fields:              #'DryDepVel_?DRY?              ',
                               'DryDep_?DRY?                  ',
                               #'DryDepChm_?DRY?              ',
                               #'DryDepMix_?DRY?              ',
@@ -203,13 +240,13 @@ COLLECTIONS: 'Restart',
 # Available for the Hg and tagged Hg simulations
 #==============================================================================
   MercuryEmis.template:       '%y4%m2%d2_%h2%n2z.nc4',
-  MercuryEmis.frequency:      00000100 000000
+  MercuryEmis.frequency:      00000001 000000
   MercuryEmis.duration:       00000100 000000
   MercuryEmis.mode:           'time-averaged'
-  MercuryEmis.fields:         'EmisHg0land                   ',
+  MercuryEmis.fields:         'EmisHg0land                   ', #rapid recycling by photoreduction
                               'EmisHg0ocean                  ',
-                              'EmisHg0snow                   ',
-                              'EmisHg0soil                   ',
+                              #'EmisHg0snow                   ', 
+                              'EmisHg0soil                   ', #legacy emissions
 ::
 #==============================================================================
 # %%%%% THE MercuryOcean COLLECTION %%%%%
@@ -238,6 +275,10 @@ COLLECTIONS: 'Restart',
 # Chemical production and loss rates
 #
 # Available for full-chemistry, aerosol-only, tagO3, and tagCO simulations
+# 
+# Used for gross oxidation/reduction:
+# Gross_Hg_Ox = Prod_Hg2+Prod_Hg2OH+Prod_Hg2Br
+# Gross_Hg_Red = Prod_Hg0
 #==============================================================================
   ProdLoss.template:          '%y4%m2%d2_%h2%n2z.nc4',
   ProdLoss.frequency:         00000100 000000
@@ -307,94 +348,62 @@ COLLECTIONS: 'Restart',
   SatDiagnEdge.fields:        'SatDiagnConc_PEDGE             ',
 ::
 #==============================================================================
-# %%%%% The StateMet COLLECTION %%%%%
+# %%%%% The StateMetSurf COLLECTION %%%%%
 #
-# Fields of the State_Met object (also see the LevelEdgeDiags collection)
+# Fields of the StateMetSurf object (also see the LevelEdgeDiags collection)
+# 
+# Full list of fields available at https://wiki.seas.harvard.edu/geos-chem/index.php/History_collections_for_met_fields_and_related_quantities
+# 
+# FIELDS USED:
+# Met_FRCLND   Olsen Land fraction - may need this to categorize lchighveg,lclowveg,lcbareland                 
+# Met_FRLAKE   Fraction of gridcell covered by lakes
+# Met_FROCEAN  Fraction of gridcell covered by ocean
+# Met_FRSEAICE Fraction of gridcell covered by seaice
+# Met_FRSNO    Fraction of gridcell covered by snow  
+# Met_PHIS     Surface geopotential height (m+2 s-2)
+# Met_PRECTOT  Total Precipitation (mm day-1) NOTE: May need to get Hourly precipitation information from elsewhere
+# Met_PSC2WET  Surface pressure for wet air (hPa)
+# Met_SLP      Sea level pressure (hPa)
+# Met_TS       Surface temperature (K)
+# Met_U10M     10 meter windspeed, east-west (m s-1)
+# Met_V10M     10 meter windspeed, north-south (m s-1)
 #
-# Available for all simulations
 #==============================================================================
-  StateMet.template:          '%y4%m2%d2_%h2%n2z.nc4',
-  StateMet.frequency:         00000100 000000
-  StateMet.duration:          00000100 000000
-  StateMet.mode:              'time-averaged'
-  StateMet.fields:            'Met_AD                        ',
-                              'Met_AIRDEN                    ',
-                              'Met_AIRVOL                    ',
-                              'Met_ALBD                      ',
-                              'Met_AVGW                      ',
-                              'Met_BXHEIGHT                  ',
-                              'Met_ChemGridLev               ',
-                              'Met_CLDF                      ',
-                              'Met_CLDFRC                    ',
-                              'Met_CLDTOPS                   ',
-                              'Met_DELP                      ',
-                              'Met_DQRCU                     ',
-                              'Met_DQRLSAN                   ',
-                              'Met_DTRAIN                    ',
-                              'Met_EFLUX                     ',
-                              'Met_FRCLND                    ',
-                              'Met_FRLAKE                    ',
-                              'Met_FRLAND                    ',
-                              'Met_FRLANDIC                  ',
-                              'Met_FROCEAN                   ',
-                              'Met_FRSEAICE                  ',
-                              'Met_FRSNO                     ',
-                              'Met_GWETROOT                  ',
-                              'Met_GWETTOP                   ',
-                              'Met_HFLUX                     ',
-                              'Met_LAI                       ',
-                              'Met_PARDR                     ',
-                              'Met_PARDF                     ',
-                              'Met_PBLTOPL                   ',
-                              'Met_PBLH                      ',
-                              'Met_PHIS                      ',
-                              'Met_PMID                      ',
-                              'Met_PMIDDRY                   ',
-                              'Met_PRECANV                   ',
-                              'Met_PRECCON                   ',
-                              'Met_PRECLSC                   ',
-                              'Met_PRECTOT                   ',
-                              'Met_PS1DRY                    ',
-                              'Met_PS1WET                    ',
-                              'Met_PS2DRY                    ',
-                              'Met_PS2WET                    ',
-                              'Met_PSC2WET                   ',
-                              'Met_PSC2DRY                   ',
-                              'Met_QI                        ',
-                              'Met_QL                        ',
-                              'Met_OMEGA                     ',
-                              'Met_OPTD                      ',
-                              'Met_REEVAPCN                  ',
-                              'Met_REEVAPLS                  ',
-                              'Met_SLP                       ',
-                              'Met_SNODP                     ',
-                              'Met_SNOMAS                    ',
-                              'Met_SPHU                      ',
-                              'Met_SPHU1                     ',
-                              'Met_SPHU2                     ',
-                              'Met_SUNCOS                    ',
-                              'Met_SUNCOSmid                 ',
-                              'Met_SWGDN                     ',
-                              'Met_T                         ',
-                              'Met_TAUCLI                    ',
-                              'Met_TAUCLW                    ',
-                              'Met_THETA                     ',
-                              'Met_TMPU1                     ',
-                              'Met_TMPU2                     ',
-                              'Met_TO3                       ',
-                              'Met_TropHt                    ',
-                              'Met_TropLev                   ',
-                              'Met_TropP                     ',
-                              'Met_TS                        ',
-                              'Met_TSKIN                     ',
-                              'Met_TV                        ',
-                              'Met_U                         ',
-                              'Met_U10M                      ',
-                              'Met_USTAR                     ',
-                              'Met_UVALBEDO                  ',
-                              'Met_V                         ',
-                              'Met_V10M                      ',
-                              'Met_Z0                        ',
+  StateMetSurf.template:          '%y4%m2%d2_%h2%n2z.nc4',
+  StateMetSurf.frequency:         00000001 000000
+  StateMetSurf.duration:          00000100 000000
+  StateMetSurf.mode:              'time-averaged'
+  StateMetSurf.levels:            1,
+  StateMetSurf.fields:            'Met_FRCLND                    ',
+                                  'Met_FRCLND                    ', 
+                                  'Met_FRLAKE                    ',
+                                  'Met_FROCEAN                   ',
+                                  'Met_FRSEAICE                  ',
+                                  'Met_FRSNO                     ',
+                                  'Met_PHIS                      ',
+                                  'Met_PRECTOT                   ',
+                                  'Met_PSC2WET                   ',
+                                  'Met_SLP                       ', 
+                                  'Met_TS                        ',
+                                  'Met_U10M                      ',
+                                  'Met_V10M                      ',
+::
+#==============================================================================
+# %%%%% THE StateMetMonth COLLECTION %%%%%
+#
+# Used to define monthly meteorology values at all model levels.
+# Units are listed at https://wiki.seas.harvard.edu/geos-chem/index.php/History_collections_for_met_fields_and_related_quantities
+# NOTE: Met_AIRDEN and Met_AIRVOL are with respect to dry air.
+#==============================================================================
+  StateMetMonth.template:          '%y4%m2%d2_%h2%n2z.nc4',
+  StateMetMonth.frequency:         00000100 000000
+  StateMetMonth.duration:          00000100 000000
+  StateMetMonth.mode:              'time-averaged'
+  StateMetMonth.fields:            'Met_PMID                    ',
+                                   'Met_T                       ',
+                                   'Met_SPHU                    ',
+                                   'Met_AIRDEN                  ',
+                                   'Met_AIRVOL                  ',
 ::
 #==============================================================================
 # %%%%% THE WetLossConv COLLECTION %%%%%
@@ -404,7 +413,7 @@ COLLECTIONS: 'Restart',
 # Available for all simulations that have soluble species
 #==============================================================================
   WetLossConv.template:       '%y4%m2%d2_%h2%n2z.nc4',
-  WetLossConv.frequency:      00000100 000000
+  WetLossConv.frequency:      00000001 000000
   WetLossConv.duration:       00000100 000000
   WetLossConv.mode:           'time-averaged'
   WetLossConv.fields:         'WetLossConv_?WET?             ',
@@ -419,7 +428,7 @@ COLLECTIONS: 'Restart',
 #==============================================================================
 # Loss due to rainout and washout (per deposited species)
   WetLossLS.template:         '%y4%m2%d2_%h2%n2z.nc4',
-  WetLossLS.frequency:        00000100 000000
+  WetLossLS.frequency:        00000001 000000
   WetLossLS.duration:         00000100 000000
   WetLossLS.mode:             'time-averaged'
   WetLossLS.fields:           'WetLossLS_?WET?               ',
