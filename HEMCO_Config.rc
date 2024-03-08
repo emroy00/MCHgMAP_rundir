@@ -27,6 +27,7 @@
 ###############################################################################
 
 ROOT:                        /net/geoschem/data/gcgrid/data/ExtData//HEMCO
+MCHgMAPdir:                  /net/fs03/d0/emroy/MCHgMAP_input_data
 GCAPSCENARIO:                not_used
 GCAPVERTRES:                 47
 Logfile:                     *
@@ -71,7 +72,8 @@ VerboseOnCores:              root       # Accepted values: root all
     --> WHET                   :       false    # 2010
     --> STREETS                :       false    # 2015
     --> ARTISANAL              :       false    # 1985
-    --> NATURAL                :       true     # 1985
+    --> NATURAL                :       true     # 2010-2020
+    --> MCHgMAP_BB             :       true     # 2010-2020
     --> SOILDIST               :       true     # 1985
     --> QFED2                  :       false    # 2000-2020
     --> EDGAR_TOT              :       false    # 1970-2012
@@ -102,8 +104,8 @@ VerboseOnCores:              root       # Accepted values: root all
 #       to maintain agreement with observations. Please see wiki for details
 #       http://wiki.seas.harvard.edu/geos-chem/index.php/Mercury
 # -----------------------------------------------------------------------------
-111     GFED              : on    Hg0
-    --> GFED4             :       true
+111     GFED              : off   Hg0
+    --> GFED4             :       false
     --> GFED_daily        :       false
     --> GFED_3hourly      :       false
     --> Scaling_CO        :       1.05
@@ -382,7 +384,8 @@ VerboseOnCores:              root       # Accepted values: root all
 # --- Natural emissions ---
 #==============================================================================
 (((NATURAL
-0 NATURAL_HG0 $ROOT/MERCURY/v2014-09/NATURAL/newnatural.geos.4x5.nc Hg0 1985/1/1/0 C xy kg/m2/s Hg0 2 3 1
+0 RockWeathering_Hg0 $MCHgMAPdir/Geogenic_emissions/Hg_geogenic.kgm2.nc4 Hg_rock_weathering_emission 2010-2020/1/1/0 RF xy kg/m2/s Hg0 - 3 1 
+0 Volcanic_Hg0       $MCHgMAPdir/Geogenic_emissions/Hg_geogenic.kgm2.nc4 Hg_volcanic_emission 2010-2020/1/1/0 RF xy kg/m2/s Hg0 - 3 1
 )))NATURAL
 
 #==============================================================================
@@ -402,6 +405,14 @@ VerboseOnCores:              root       # Accepted values: root all
 0 QFED_Hg_PBL    $ROOT/QFED/v2018-07/$YYYY/$MM/qfed2.emis_co.006.$YYYY$MM$DD.nc4   biomass 2000-2022/1-12/1-31/0/+12hour EFY xyL=1:PBL     kg/m2/s Hg0  54/75/311 5 2
 0 QFED_Hg_FT     $ROOT/QFED/v2018-07/$YYYY/$MM/qfed2.emis_co.006.$YYYY$MM$DD.nc4   biomass 2000-2022/1-12/1-31/0/+12hour EFY xyL=PBL:5500m kg/m2/s Hg0  54/75/312 5 2
 )))QFED2
+
+#==============================================================================
+# --- MCHgMAP biomass burning (90% Hg0,10% HgP) ---
+#==============================================================================
+(((MCHgMAP_BB
+0 GFED_Hg0      $MCHgMAPdir/BioBurn_emissions_GFED/Hg_wildfire_monthly_gfed4s_flux_$YYYY$MM.nc4 Hg0 2010-2020/1-12/1-31/0 RF xy kg/m2/s Hg0 - 1 1
+0 GFED_HgP      $MCHgMAPdir/BioBurn_emissions_GFED/Hg_wildfire_monthly_gfed4s_flux_$YYYY$MM.nc4 HgP 2010-2020/1-12/1-31/0 RF xy kg/m2/s HgP - 1 1
+)))MCHgMAP_BB
 
 ###############################################################################
 ### EXTENSION DATA (subsection of BASE EMISSIONS SECTION)
