@@ -10,8 +10,8 @@
 #============================================================================
 simulation:
   name: Hg
-  start_date: [20190101, 000000]
-  end_date: [20190201, 000000]
+  start_date: [20140101, 000000]
+  end_date: [20151231, 000000]
   root_data_dir: /net/geoschem/data/gcgrid/data/ExtData/
   met_field: MERRA2
   species_database_file: ./species_database.yml
@@ -66,7 +66,7 @@ operations:
   photolysis:
     activate: true
     input_directories:
-      fastjx_input_dir: /net/geoschem/data/gcgrid/data/ExtData//CHEM_INPUTS/FAST_JX/v2022-10-Hg/
+      fastjx_input_dir: /net/geoschem/data/gcgrid/data/ExtData//CHEM_INPUTS/FAST_JX/v2023-11-Hg/ 
       cloudj_input_dir: /net/geoschem/data/gcgrid/data/ExtData//CHEM_INPUTS/CLOUD_J/v2023-11-Hg/
     overhead_O3:
       use_online_O3_from_model: true 
