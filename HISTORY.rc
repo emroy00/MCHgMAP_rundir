@@ -41,7 +41,8 @@ COLLECTIONS: 'Restart',
              'ProdLoss',
              #'SatDiagn',
              #'SatDiagnEdge',
-             'StateMet',
+             'StateMetSurf',
+             'StateMetMonth',
              'WetLossConv',
              'WetLossLS',
              #'BoundaryConditions',
@@ -61,8 +62,8 @@ COLLECTIONS: 'Restart',
 # Available for all simulations
 #==============================================================================
   Restart.filename:           './Restarts/GEOSChem.Restart.%y4%m2%d2_%h2%n2z.nc4',
-  Restart.frequency:          'End',
-  Restart.duration:           'End',
+  Restart.frequency:          00000100 000000,
+  Restart.duration:           00000100 000000,
   Restart.mode:               'instantaneous'
   Restart.fields:             'SpeciesRst_?ALL?               ',
                               'Chem_KPPHvalue                 ',
@@ -109,7 +110,7 @@ COLLECTIONS: 'Restart',
   SpeciesConcVolMonth.frequency:      00000100 000000
   SpeciesConcVolMonth.duration:       00000100 000000
   SpeciesConcVolMonth.mode:           'time-averaged'
-  SpeciesConcVolDay.fields:         'SpeciesConcVV_?ALL?           ',
+  SpeciesConcVolMonth.fields:         'SpeciesConcVV_?ALL?           ',
                                     #'SpeciesConcMND_?ALL?          ',
 ::
 #==============================================================================
@@ -182,7 +183,7 @@ COLLECTIONS: 'Restart',
 # Available for all simuations that have dry-depositing species
 #==============================================================================
   DryDep.template:            '%y4%m2%d2_%h2%n2z.nc4',
-  DryDep.frequency:           00000100 000000
+  DryDep.frequency:           00000001 000000
   DryDep.duration:            00000100 000000
   DryDep.mode:                'time-averaged'
   DryDep.fields:              #'DryDepVel_?DRY?              ',
