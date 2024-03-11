@@ -127,8 +127,8 @@ COLLECTIONS: 'Restart',
   SpeciesConcMassDay.frequency:      00000001 000000
   SpeciesConcMassDay.duration:       00000100 000000
   SpeciesConcMassDay.mode:           'time-averaged'
-  SpeciesConcMassDay.fields:         #'SpeciesConcVV_?ALL?           ',
-                                     'SpeciesConcMND_?ALL?          ',
+  SpeciesConcMassDay.fields:         'SpeciesConcMND_?ALL?          ',
+# To be edited, likely with column totals of just Hg0 Hg2 and HgP
 ::
 #==============================================================================
 # %%%%% THE Budget COLLECTION %%%%%
@@ -186,8 +186,8 @@ COLLECTIONS: 'Restart',
   DryDep.frequency:           00000001 000000
   DryDep.duration:            00000100 000000
   DryDep.mode:                'time-averaged'
-  DryDep.fields:              #'DryDepVel_?DRY?              ',
-                              'DryDep_?DRY?                  ',
+  DryDep.fields:              'DryDep_?DRY?                  ',
+                              #'DryDepVel_?DRY?              ',
                               #'DryDepChm_?DRY?              ',
                               #'DryDepMix_?DRY?              ',
 ::
@@ -218,19 +218,13 @@ COLLECTIONS: 'Restart',
 # Available for the Hg and tagged Hg simulations
 #==============================================================================
   MercuryChem.template:       '%y4%m2%d2_%h2%n2z.nc4',
-  MercuryChem.frequency:      00000100 000000
+  MercuryChem.frequency:      00000001 000000
   MercuryChem.duration:       00000100 000000
   MercuryChem.mode:           'time-averaged'
-  MercuryChem.fields:         'HgBrAfterChem                 ',
-                              'HgClAfterChem                 ',
-                              'HgOHAfterChem                 ',
-                              'HgBrOAfterChem                ',
-                              'HgClOAfterChem                ',
-                              'HgOHOAfterChem                ',
-                              'Hg2GToHg2P                    ',
+  MercuryChem.fields:         'Hg2GasToSSA                   ',
+                              'Hg2GToHg2P                    ', # potentially could be commented out
                               'Hg2PToHg2G                    ',
                               'Hg2GasToHg2StrP               ',
-                              'Hg2GasToSSA                   ',
 ::
 #==============================================================================
 # %%%%% THE MercuryEmis COLLECTION %%%%%
@@ -246,7 +240,7 @@ COLLECTIONS: 'Restart',
   MercuryEmis.mode:           'time-averaged'
   MercuryEmis.fields:         'EmisHg0land                   ', #rapid recycling by photoreduction
                               'EmisHg0ocean                  ',
-                              #'EmisHg0snow                   ', 
+                              'EmisHg0snow                   ', # we need these mercury emissions from snow, part of prompt recycling 
                               'EmisHg0soil                   ', #legacy emissions
 ::
 #==============================================================================
@@ -278,7 +272,7 @@ COLLECTIONS: 'Restart',
 # Available for full-chemistry, aerosol-only, tagO3, and tagCO simulations
 # 
 # Used for gross oxidation/reduction:
-# Gross_Hg_Ox = Prod_Hg2+Prod_Hg2OH+Prod_Hg2Br
+# Gross_Hg_Ox = Prod_Hg2
 # Gross_Hg_Red = Prod_Hg0
 #==============================================================================
   ProdLoss.template:          '%y4%m2%d2_%h2%n2z.nc4',
@@ -405,6 +399,8 @@ COLLECTIONS: 'Restart',
                                    'Met_SPHU                    ',
                                    'Met_AIRDEN                  ',
                                    'Met_AIRVOL                  ',
+                                   'Met_TropHt                  ', # It might be useful to have troposphere height and level if we end up wanting to distinguish strat-trop budgets
+                                   'Met_TropLev                 ',
 ::
 #==============================================================================
 # %%%%% THE WetLossConv COLLECTION %%%%%
@@ -418,7 +414,6 @@ COLLECTIONS: 'Restart',
   WetLossConv.duration:       00000100 000000
   WetLossConv.mode:           'time-averaged'
   WetLossConv.fields:         'WetLossConv_?WET?             ',
-                              'WetLossConvFrac_?WET?         ',
 ::
 #==============================================================================
 # %%%%% THE WetLossLS COLLECTION %%%%%
