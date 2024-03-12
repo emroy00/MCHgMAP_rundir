@@ -369,15 +369,13 @@ COLLECTIONS: 'Restart',
   StateMetSurf.duration:          00000100 000000
   StateMetSurf.mode:              'time-averaged'
   StateMetSurf.levels:            1,
-  StateMetSurf.fields:            'Met_FRCLND                    ',
-                                  'Met_FRCLND                    ', 
-                                  'Met_FRLAKE                    ',
-                                  'Met_FROCEAN                   ',
-                                  'Met_FRSEAICE                  ',
+  StateMetSurf.fields:            'Met_FRSEAICE                  ',
                                   'Met_FRSNO                     ',
                                   'Met_PHIS                      ',
                                   'Met_PRECTOT                   ',
                                   'Met_PSC2WET                   ',
+                                  'Met_AIRDEN                    ', # we need these for converting surface daily vmr to conc.
+                                  'Met_AIRVOL                    ', # we need these for converting surface daily vmr to conc.
                                   'Met_SLP                       ', 
                                   'Met_TS                        ',
                                   'Met_U10M                      ',
@@ -399,7 +397,7 @@ COLLECTIONS: 'Restart',
                                    'Met_SPHU                    ',
                                    'Met_AIRDEN                  ',
                                    'Met_AIRVOL                  ',
-                                   'Met_TropHt                  ', # It might be useful to have troposphere height and level if we end up wanting to distinguish strat-trop budgets
+                                   'Met_TropHt                  ', # useful to distinguish strat-trop budgets
                                    'Met_TropLev                 ',
 ::
 #==============================================================================
