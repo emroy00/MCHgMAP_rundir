@@ -33,7 +33,7 @@ COLLECTIONS: 'Restart',
              #'MercuryOcean',
              'SpeciesConcVolDiel',
              'SpeciesConcVolMonth',
-             'SpeciesConcMassDay',
+             'MercuryColumnDay',
              #'Budget',
              #'CloudConvFlux',
              'DryDep',
@@ -94,6 +94,8 @@ COLLECTIONS: 'Restart',
   SpeciesConcVolDiel.mode:           'time-averaged'
   SpeciesConcVolDiel.levels:         1,
   SpeciesConcVolDiel.fields:         'SpeciesConcVV_?ALL?           ',
+                                     'TotalHg2G                     ',
+                                     'TotalHg2P                     ',
                                     #'SpeciesConcMND_?ALL?          ',
 ::
 #==============================================================================
@@ -114,21 +116,20 @@ COLLECTIONS: 'Restart',
                                     #'SpeciesConcMND_?ALL?          ',
 ::
 #==============================================================================
-# %%%%% THE SpeciesConcMassDay (molec cm-3, local conditions)  COLLECTION %%%%%
+# %%%%% THE MercuryColumnDay (kg Hg m-2, local conditions)  COLLECTION %%%%%
 #
 # GEOS-Chem species concentrations (default = all species)
 #
 # Available for all simulations
 #
-# Concentrations may be saved out as SpeciesConcVV  [v/v dry air] or
-#                                    SpeciesConcMND [molec/cm3]
 #==============================================================================
-  SpeciesConcMassDay.template:       '%y4%m2%d2_%h2%n2z.nc4',
-  SpeciesConcMassDay.frequency:      00000001 000000
-  SpeciesConcMassDay.duration:       00000100 000000
-  SpeciesConcMassDay.mode:           'time-averaged'
-  SpeciesConcMassDay.fields:         'SpeciesConcMND_?ALL?          ',
-# To be edited, likely with column totals of just Hg0 Hg2 and HgP
+  MercuryColumnDay.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  MercuryColumnDay.frequency:      00000001 000000
+  MercuryColumnDay.duration:       00000100 000000
+  MercuryColumnDay.mode:           'time-averaged'
+  MercuryColumnDay.fields:         'ColumnHg0          ',
+                                   'ColumnHg2G         ',
+                                   'ColumnHg2P         ',
 ::
 #==============================================================================
 # %%%%% THE Budget COLLECTION %%%%%
@@ -374,8 +375,8 @@ COLLECTIONS: 'Restart',
                                   'Met_PHIS                      ',
                                   'Met_PRECTOT                   ',
                                   'Met_PSC2WET                   ',
-                                  'Met_AIRDEN                    ', # we need these for converting surface daily vmr to conc.
-                                  'Met_AIRVOL                    ', # we need these for converting surface daily vmr to conc.
+                                  'Met_AIRDEN                    ',
+                                  'Met_AIRVOL                    ', 
                                   'Met_SLP                       ', 
                                   'Met_TS                        ',
                                   'Met_U10M                      ',
