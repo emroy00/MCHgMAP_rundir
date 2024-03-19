@@ -29,14 +29,15 @@ EXPID:  ./OutputDir/GEOSChem
 #==============================================================================
 COLLECTIONS: 'Restart',
              'MercuryChem',
+             'DryDep',
+             'MercuryDep',
              'MercuryEmis',
              #'MercuryOcean',
-             'SpeciesConcVolDiel',
              'SpeciesConcVolMonth',
+             'SpeciesConcVolDiel',
              'MercuryColumnDay',
              #'Budget',
              #'CloudConvFlux',
-             'DryDep',
              #'LevelEdgeDiags',
              'ProdLoss',
              #'SatDiagn',
@@ -79,26 +80,6 @@ COLLECTIONS: 'Restart',
                               'Chem_SnowHgLandStored          ',
 ::
 #==============================================================================
-# %%%%% THE SpeciesConcVolDiel COLLECTION %%%%%
-#
-# GEOS-Chem species concentrations (default = all species)
-#
-# Available for all simulations
-#
-# Concentrations may be saved out as SpeciesConcVV  [v/v dry air] or
-#                                    SpeciesConcMND [molec/cm3]
-#==============================================================================
-  SpeciesConcVolDiel.template:       '%y4%m2%d2_%h2%n2z.nc4',
-  SpeciesConcVolDiel.frequency:      00000000 010000
-  SpeciesConcVolDiel.duration:       00000100 000000
-  SpeciesConcVolDiel.mode:           'time-averaged'
-  SpeciesConcVolDiel.levels:         1,
-  SpeciesConcVolDiel.fields:         'SpeciesConcVV_?ALL?           ',
-                                     'TotalHg2G                     ',
-                                     'TotalHg2P                     ',
-                                    #'SpeciesConcMND_?ALL?          ',
-::
-#==============================================================================
 # %%%%% THE SpeciesConcVolMonth COLLECTION %%%%%
 #
 # GEOS-Chem species concentrations (default = all species)
@@ -113,6 +94,26 @@ COLLECTIONS: 'Restart',
   SpeciesConcVolMonth.duration:       00000100 000000
   SpeciesConcVolMonth.mode:           'time-averaged'
   SpeciesConcVolMonth.fields:         'SpeciesConcVV_?ALL?           ',
+                                    #'SpeciesConcMND_?ALL?          ',
+::
+#==============================================================================
+# %%%%% THE SpeciesConcVolDiel COLLECTION %%%%%
+#
+# GEOS-Chem species concentrations (default = all species)
+#
+# Available for all simulations
+#
+# Concentrations may be saved out as SpeciesConcVV  [v/v dry air] or
+#                                    SpeciesConcMND [molec/cm3]
+#==============================================================================
+  SpeciesConcVolDiel.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  SpeciesConcVolDiel.frequency:      00000000 010000
+  SpeciesConcVolDiel.duration:       00000100 000000
+  SpeciesConcVolDiel.mode:           'time-averaged'
+  SpeciesConcVolDiel.levels:         1,
+  SpeciesConcVolDiel.fields:         'SpeciesConcVV_Hg0             ',
+                                     'TotalHg2G                     ',
+                                     'TotalHg2P                     ',
                                     #'SpeciesConcMND_?ALL?          ',
 ::
 #==============================================================================
@@ -184,13 +185,28 @@ COLLECTIONS: 'Restart',
 # Available for all simuations that have dry-depositing species
 #==============================================================================
   DryDep.template:            '%y4%m2%d2_%h2%n2z.nc4',
-  DryDep.frequency:           00000001 000000
-  DryDep.duration:            00000100 000000
-  DryDep.mode:                'time-averaged'
+  DryDep.frequency:           'End'
+  DryDep.duration:            'End'
+  DryDep.mode:                'instantaneous'
   DryDep.fields:              'DryDep_?DRY?                  ',
-                              #'DryDepVel_?DRY?              ',
-                              #'DryDepChm_?DRY?              ',
-                              #'DryDepMix_?DRY?              ',
+::
+#==============================================================================
+# %%%%% THE MercuryDep COLLECTION %%%%%
+#
+# Mercury depositon fluxes for Hg0, Hg2, and HgP (summarized from all oxidized species)
+#
+# Available for Mercury (MCHgMAP)
+#==============================================================================
+  MercuryDep.template:            '%y4%m2%d2_%h2%n2z.nc4',
+  MercuryDep.frequency:           00000001 000000
+  MercuryDep.duration:            00000100 000000
+  MercuryDep.mode:                'time-averaged'
+  MercuryDep.fields:              'DryDep_Hg0                  ',
+                                  'DryDepHg2G                  ',
+                                  'DryDepHg2P                  ',
+                                  'WetDepHg2G                  ',
+                                  'WetDepHg2P                  ',
+                                  'LossHg2bySeaSalt            ',
 ::
 #==============================================================================
 # %%%%% THE LevelEdgeDiags COLLECTION %%%%%
@@ -219,11 +235,10 @@ COLLECTIONS: 'Restart',
 # Available for the Hg and tagged Hg simulations
 #==============================================================================
   MercuryChem.template:       '%y4%m2%d2_%h2%n2z.nc4',
-  MercuryChem.frequency:      00000001 000000
+  MercuryChem.frequency:      00000100 000000
   MercuryChem.duration:       00000100 000000
   MercuryChem.mode:           'time-averaged'
-  MercuryChem.fields:         'Hg2GasToSSA                   ',
-                              'Hg2GToHg2P                    ', # potentially could be commented out
+  MercuryChem.fields:         'Hg2GToHg2P                    ',
                               'Hg2PToHg2G                    ',
                               'Hg2GasToHg2StrP               ',
 ::
@@ -409,9 +424,9 @@ COLLECTIONS: 'Restart',
 # Available for all simulations that have soluble species
 #==============================================================================
   WetLossConv.template:       '%y4%m2%d2_%h2%n2z.nc4',
-  WetLossConv.frequency:      00000001 000000
-  WetLossConv.duration:       00000100 000000
-  WetLossConv.mode:           'time-averaged'
+  WetLossConv.frequency:      'End'
+  WetLossConv.duration:       'End'
+  WetLossConv.mode:           'instantaneous'
   WetLossConv.fields:         'WetLossConv_?WET?             ',
 ::
 #==============================================================================
@@ -423,9 +438,9 @@ COLLECTIONS: 'Restart',
 #==============================================================================
 # Loss due to rainout and washout (per deposited species)
   WetLossLS.template:         '%y4%m2%d2_%h2%n2z.nc4',
-  WetLossLS.frequency:        00000001 000000
-  WetLossLS.duration:         00000100 000000
-  WetLossLS.mode:             'time-averaged'
+  WetLossLS.frequency:        'End', 
+  WetLossLS.duration:         'End', 
+  WetLossLS.mode:             'instantaneous'
   WetLossLS.fields:           'WetLossLS_?WET?               ',
 ::
 #==============================================================================
