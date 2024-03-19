@@ -94,6 +94,8 @@ COLLECTIONS: 'Restart',
   SpeciesConcVolMonth.duration:       00000100 000000
   SpeciesConcVolMonth.mode:           'time-averaged'
   SpeciesConcVolMonth.fields:         'SpeciesConcVV_?ALL?           ',
+                                      'TotalHg2G                     ',
+                                      'TotalHg2P                     ',
                                     #'SpeciesConcMND_?ALL?          ',
 ::
 #==============================================================================
