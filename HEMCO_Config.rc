@@ -385,8 +385,8 @@ VerboseOnCores:              root       # Accepted values: root all
 # --- Natural emissions ---
 #==============================================================================
 (((NATURAL
-0 RockWeathering_Hg0 $MCHgMAPdir/Geogenic_emissions/Hg_geogenic.kgm2s.nc4 Hg_rock_weathering_emission 2010-2020/1/1/0 RF xy kg/m2/s Hg0 - 3 1 
-0 Volcanic_Hg0       $MCHgMAPdir/Geogenic_emissions/Hg_geogenic.kgm2s.nc4 Hg_volcanic_emission 2010-2020/1/1/0 RF xy kg/m2/s Hg0 - 3 1
+0 RockWeathering_Hg0 $MCHgMAPdir/Geogenic_emissions/Hg_geogenic.kgm2s.nc4 Hg_rock_weathering_emission 2010-2020/1/1/0 C xy kg/m2/s Hg0 - 3 1 
+0 Volcanic_Hg0       $MCHgMAPdir/Geogenic_emissions/Hg_geogenic.kgm2s.nc4 Hg_volcanic_emission 2010-2020/1/1/0 C xy kg/m2/s Hg0 - 3 1
 )))NATURAL
 
 #==============================================================================
