@@ -1,0 +1,460 @@
+###############################################################################
+###  HISTORY.rc file for GEOS-Chem Hg specialty simulations                 ###
+###  Contact: GEOS-Chem Support Team (geos-chem-support@g.harvard.edu)      ###
+###############################################################################
+
+#============================================================================
+# EXPID allows you to specify the beginning of the file path corresponding
+# to each diagnostic collection.  For example:
+#
+#   EXPID: ./GEOSChem
+#      Will create netCDF files whose names begin "GEOSChem",
+#      in this run directory.
+#
+#   EXPID: ./OutputDir/GEOSChem
+#      Will create netCDF files whose names begin with "GEOSChem"
+#      in the OutputDir sub-folder of this run directory.
+#
+#============================================================================
+EXPID:  ./OutputDir/GEOSChem
+
+#==============================================================================
+# %%%%% COLLECTION NAME DECLARATIONS %%%%%
+#
+# To enable a collection, remove the "#" character in front of its name. The
+# Restart collection should always be turned on.
+#
+# NOTE: These are the "default" collections for GEOS-Chem, but you can create
+# your own customized diagnostic collections as well.
+#==============================================================================
+COLLECTIONS: 'Restart',
+             'MercuryChem',
+             'DryDep',
+             'MercuryDep',
+             'MercuryEmis',
+             #'MercuryOcean',
+             'SpeciesConcVolMonth',
+             'SpeciesConcVolDiel',
+             'MercuryColumnDay',
+             #'Budget',
+             #'CloudConvFlux',
+             #'LevelEdgeDiags',
+             'ProdLoss',
+             #'SatDiagn',
+             #'SatDiagnEdge',
+             'StateMetSurf',
+             'StateMetMonth',
+             'WetLossConv',
+             'WetLossLS',
+             #'BoundaryConditions',
+::
+###############################################################################
+### The rest of this file consists of collection definitions.               ###
+### Above collections whose declarations are commented out will be ignored. ###
+### Make sure that each collection definition, as well as the list of       ###
+### collections above, ends with a double-colon ("::").                     ###
+###############################################################################
+
+#==============================================================================
+# %%%%% THE Restart COLLECTION %%%%%
+#
+# GEOS-Chem restart file fields
+#
+# Available for all simulations
+#==============================================================================
+  Restart.filename:           './Restarts/GEOSChem.Restart.%y4%m2%d2_%h2%n2z.nc4',
+  Restart.frequency:          00000100 000000,
+  Restart.duration:           00000100 000000,
+  Restart.mode:               'instantaneous'
+  Restart.fields:             'SpeciesRst_?ALL?               ',
+                              'Chem_KPPHvalue                 ',
+                              'Met_DELPDRY                    ',
+                              'Met_BXHEIGHT                   ',
+                              'Met_TropLev                    ',
+                              'Chem_OceanHg0                  ',
+                              'Chem_OceanHg2                  ',
+                              'Chem_OceanHgP                  ',
+                              'Chem_SnowHgOcean               ',
+                              'Chem_SnowHgLand                ',
+                              'Chem_SnowHgOceanStored         ',
+                              'Chem_SnowHgLandStored          ',
+::
+#==============================================================================
+# %%%%% THE SpeciesConcVolMonth COLLECTION %%%%%
+#
+# GEOS-Chem species concentrations (default = all species)
+#
+# Available for all simulations
+#
+# Concentrations may be saved out as SpeciesConcVV  [v/v dry air] or
+#                                    SpeciesConcMND [molec/cm3]
+#==============================================================================
+  SpeciesConcVolMonth.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  SpeciesConcVolMonth.frequency:      00000100 000000
+  SpeciesConcVolMonth.duration:       00000100 000000
+  SpeciesConcVolMonth.mode:           'time-averaged'
+  SpeciesConcVolMonth.fields:         'SpeciesConcVV_?ALL?           ',
+                                      'TotalHg2G                     ',
+                                      'TotalHg2P                     ',
+                                    #'SpeciesConcMND_?ALL?          ',
+::
+#==============================================================================
+# %%%%% THE SpeciesConcVolDiel COLLECTION %%%%%
+#
+# GEOS-Chem species concentrations (default = all species)
+#
+# Available for all simulations
+#
+# Concentrations may be saved out as SpeciesConcVV  [v/v dry air] or
+#                                    SpeciesConcMND [molec/cm3]
+#==============================================================================
+  SpeciesConcVolDiel.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  SpeciesConcVolDiel.frequency:      00000000 010000
+  SpeciesConcVolDiel.duration:       00000100 000000
+  SpeciesConcVolDiel.mode:           'time-averaged'
+  SpeciesConcVolDiel.levels:         1,
+  SpeciesConcVolDiel.fields:         'SpeciesConcVV_Hg0             ',
+                                     'TotalHg2G                     ',
+                                     'TotalHg2P                     ',
+                                    #'SpeciesConcMND_?ALL?          ',
+::
+#==============================================================================
+# %%%%% THE MercuryColumnDay (kg Hg m-2, local conditions)  COLLECTION %%%%%
+#
+# GEOS-Chem species concentrations (default = all species)
+#
+# Available for all simulations
+#
+#==============================================================================
+  MercuryColumnDay.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  MercuryColumnDay.frequency:      00000001 000000
+  MercuryColumnDay.duration:       00000100 000000
+  MercuryColumnDay.mode:           'time-averaged'
+  MercuryColumnDay.fields:         'ColumnHg0          ',
+                                   'ColumnHg2G         ',
+                                   'ColumnHg2P         ',
+::
+#==============================================================================
+# %%%%% THE Budget COLLECTION %%%%%
+#
+# GEOS-Chem budget diagnostics defined as species kg/s in the column
+# (full, troposphere, or PBL) due to a single component (e.g. chemistry)
+# (default = advected species)
+#
+# Available for all simulations
+#==============================================================================
+  Budget.template:     '%y4%m2%d2_%h2%n2z.nc4',
+  Budget.frequency:    00000100 000000
+  Budget.duration:     00000100 000000
+  Budget.mode:         'time-averaged'
+  Budget.fields:       'BudgetEmisDryDepFull_?ADV?           ',
+                       'BudgetEmisDryDepTrop_?ADV?           ',
+                       'BudgetEmisDryDepPBL_?ADV?            ',
+                       'BudgetChemistryFull_?ADV?            ',
+                       'BudgetChemistryTrop_?ADV?            ',
+                       'BudgetChemistryPBL_?ADV?             ',
+                       'BudgetTransportFull_?ADV?            ',
+                       'BudgetTransportTrop_?ADV?            ',
+                       'BudgetTransportPBL_?ADV?             ',
+                       'BudgetMixingFull_?ADV?               ',
+                       'BudgetMixingTrop_?ADV?               ',
+                       'BudgetMixingPBL_?ADV?                ',
+                       'BudgetConvectionFull_?ADV?           ',
+                       'BudgetConvectionTrop_?ADV?           ',
+                       'BudgetConvectionPBL_?ADV?            ',
+                       'BudgetWetDepFull_?WET?               ',
+                       'BudgetWetDepTrop_?WET?               ',
+                       'BudgetWetDepPBL_?WET?                ',
+::
+#==============================================================================
+# %%%%% THE CloudConvFlux COLLECTION %%%%%
+#
+# Cloud convective flux (default = advected species)
+#
+# Available for all simulations
+#==============================================================================
+  CloudConvFlux.template:     '%y4%m2%d2_%h2%n2z.nc4',
+  CloudConvFlux.frequency:    00000100 000000
+  CloudConvFlux.duration:     00000100 000000
+  CloudConvFlux.mode:         'time-averaged'
+  CloudConvFlux.fields:       'CloudConvFlux_?ADV?           ',
+::
+#==============================================================================
+# %%%%% THE DryDep COLLECTION %%%%%
+#
+# Dry depositon fluxes and velocities (for all dry-depositing species)
+#
+# Available for all simuations that have dry-depositing species
+#==============================================================================
+  DryDep.template:            '%y4%m2%d2_%h2%n2z.nc4',
+  DryDep.frequency:           'End'
+  DryDep.duration:            'End'
+  DryDep.mode:                'instantaneous'
+  DryDep.fields:              'DryDep_?DRY?                  ',
+::
+#==============================================================================
+# %%%%% THE MercuryDep COLLECTION %%%%%
+#
+# Mercury depositon fluxes for Hg0, Hg2, and HgP (summarized from all oxidized species)
+#
+# Available for Mercury (MCHgMAP)
+#==============================================================================
+  MercuryDep.template:            '%y4%m2%d2_%h2%n2z.nc4',
+  MercuryDep.frequency:           00000001 000000
+  MercuryDep.duration:            00000100 000000
+  MercuryDep.mode:                'time-averaged'
+  MercuryDep.fields:              'DryDep_Hg0                  ',
+                                  'DryDepHg2G                  ',
+                                  'DryDepHg2P                  ',
+                                  'WetDepHg2G                  ',
+                                  'WetDepHg2P                  ',
+                                  'LossHg2bySeaSalt            ',
+::
+#==============================================================================
+# %%%%% THE LevelEdgeDiags COLLECTION %%%%%
+#
+# Diagnostics that are defined on grid box level edges
+#
+# Available for all simulations
+#==============================================================================
+  LevelEdgeDiags.template:    '%y4%m2%d2_%h2%n2z.nc4',
+  LevelEdgeDiags.frequency:   00000100 000000
+  LevelEdgeDiags.duration:    00000100 000000
+  LevelEdgeDiags.mode:        'time-averaged'
+  LevelEdgeDiags.fields:      'Met_CMFMC                     ',
+                              'Met_PEDGE                     ',
+                              'Met_PEDGEDRY                  ',
+                              'Met_PFICU                     ',
+                              'Met_PFILSAN                   ',
+                              'Met_PFLCU                     ',
+                              'Met_PFLLSAN                   ',
+::
+#==============================================================================
+# %%%%% THE MercuryChem COLLECTION %%%%%
+#
+# Concentration and prod/loss diagnostics for mercury species
+#
+# Available for the Hg and tagged Hg simulations
+#==============================================================================
+  MercuryChem.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  MercuryChem.frequency:      00000100 000000
+  MercuryChem.duration:       00000100 000000
+  MercuryChem.mode:           'time-averaged'
+  MercuryChem.fields:         'Hg2GToHg2P                    ',
+                              'Hg2PToHg2G                    ',
+                              'Hg2GasToHg2StrP               ',
+::
+#==============================================================================
+# %%%%% THE MercuryEmis COLLECTION %%%%%
+#
+# Concentration and prod/loss diagnostics for mercury species that are
+# not archived by HEMCO.
+#
+# Available for the Hg and tagged Hg simulations
+#==============================================================================
+  MercuryEmis.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  MercuryEmis.frequency:      00000001 000000
+  MercuryEmis.duration:       00000100 000000
+  MercuryEmis.mode:           'time-averaged'
+  MercuryEmis.fields:         'EmisHg0land                   ', #rapid recycling by photoreduction
+                              'EmisHg0ocean                  ',
+                              'EmisHg0snow                   ', # we need these mercury emissions from snow, part of prompt recycling 
+                              'EmisHg0soil                   ', #legacy emissions
+::
+#==============================================================================
+# %%%%% THE MercuryOcean COLLECTION %%%%%
+#
+# Oceanic masses and fluxes of mercury species
+#
+# Available for the Hg and tagged Hg simulations
+#==============================================================================
+  MercuryOcean.template:      '%y4%m2%d2_%h2%n2z.nc4',
+  MercuryOcean.frequency:     00000100 000000
+  MercuryOcean.duration:      00000100 000000
+  MercuryOcean.mode:          'time-averaged'
+  MercuryOcean.fields:        'FluxHg0fromAirToOcean         ',
+                              'FluxHg0fromOceanToAir         ',
+                              'FluxHg2HgPfromAirToOcean      ',
+                              'FluxHg2toDeepOcean            ',
+                              'FluxOCtoDeepOcean             ',
+                              'MassHg0inOcean                ',
+                              'MassHg2inOcean                ',
+                              'MassHgPinOcean                ',
+                              'MassHgTotalInOcean            ',
+::
+#==============================================================================
+# %%%%% THE ProdLoss COLLECTION %%%%%
+#
+# Chemical production and loss rates
+#
+# Available for full-chemistry, aerosol-only, tagO3, and tagCO simulations
+# 
+# Used for gross oxidation/reduction:
+# Gross_Hg_Ox = Prod_Hg2
+# Gross_Hg_Red = Prod_Hg0
+#==============================================================================
+  ProdLoss.template:          '%y4%m2%d2_%h2%n2z.nc4',
+  ProdLoss.frequency:         00000100 000000
+  ProdLoss.duration:          00000100 000000
+  ProdLoss.mode:              'time-averaged'
+  ProdLoss.fields:            'Prod_?PRD?                    ',
+::
+#==============================================================================
+# %%%%% THE SatDiagn COLLECTION %%%%%
+#
+# GEOS-Chem data during satellite overpass
+#
+# Available for all simulations
+#==============================================================================
+  SatDiagn.template:          '%y4%m2%d2_%h2%n2z.nc4',
+  SatDiagn.format:            'CFIO',
+  SatDiagn.frequency:         00000001 000000
+  SatDiagn.duration:          00000100 000000
+  SatDiagn.hrrange:           11.98 15.02
+  SatDiagn.mode:              'time-averaged'
+  SatDiagn.fields:            'SatDiagnConc_Hg0               ',
+                              'SatDiagnRH                     ',
+                              'SatDiagnAirDen                 ',
+                              'SatDiagnBoxHeight              ',
+                              'SatDiagnPEdge                  ',
+                              'SatDiagnTROPP                  ',
+                              'SatDiagnPBLHeight              ',
+                              'SatDiagnPBLTop                 ',
+                              'SatDiagnTAir                   ',
+                              'SatDiagnGWETROOT               ',
+                              'SatDiagnGWETTOP                ',
+                              'SatDiagnPARDR                  ',
+                              'SatDiagnPARDF                  ',
+                              'SatDiagnPRECTOT                ',
+                              'SatDiagnSLP                    ',
+                              'SatDiagnSPHU                   ',
+                              'SatDiagnTS                     ',
+                              'SatDiagnPBLTOPL                ',
+                              'SatDiagnMODISLAI               ',
+                              'SatDiagnWetLossLS_Hg0          ',
+                              'SatDiagnWetLossConv_Hg0        ',
+                              'SatDiagnJval_Hg0               ',
+                              'SatDiagnDryDep_Hg0             ',
+                              'SatDiagnOHreactivity           ',
+                              'SatDiagnColEmis_Hg0            ',
+                              'SatDiagnSurfFlux_Hg0           ',
+                              'SatDiagnColEmis_CH2O           ',
+                              'SatDiagnSurfFlux_CH2O          ',
+                              'SatDiagnColEmis_NO             ',
+                              'SatDiagnSurfFlux_NO            ',
+                              'SatDiagnProd_?PRD?             ',
+                              'SatDiagnLoss_?LOS?             ',
+::
+#==============================================================================
+# %%%%% THE SatDiagnEdge COLLECTION %%%%%
+#
+# GEOS-Chem data (on level edges) during satellite overpass
+#
+# Available for all simulations
+#==============================================================================
+  SatDiagnEdge.template:      '%y4%m2%d2_%h2%n2z.nc4',
+  SatDiagnEdge.format:        'CFIO',
+  SatDiagnEdge.frequency:     00000001 000000
+  SatDiagnEdge.duration:      00000100 000000
+  SatDiagnEdge.hrrange:       11.98 15.02
+  SatDiagnEdge.mode:          'time-averaged'
+  SatDiagnEdge.fields:        'SatDiagnConc_PEDGE             ',
+::
+#==============================================================================
+# %%%%% The StateMetSurf COLLECTION %%%%%
+#
+# Fields of the StateMetSurf object (also see the LevelEdgeDiags collection)
+# 
+# Full list of fields available at https://wiki.seas.harvard.edu/geos-chem/index.php/History_collections_for_met_fields_and_related_quantities
+# 
+# FIELDS USED:
+# Met_FRCLND   Olsen Land fraction - may need this to categorize lchighveg,lclowveg,lcbareland                 
+# Met_FRLAKE   Fraction of gridcell covered by lakes
+# Met_FROCEAN  Fraction of gridcell covered by ocean
+# Met_FRSEAICE Fraction of gridcell covered by seaice
+# Met_FRSNO    Fraction of gridcell covered by snow  
+# Met_PHIS     Surface geopotential height (m+2 s-2)
+# Met_PRECTOT  Total Precipitation (mm day-1) NOTE: May need to get Hourly precipitation information from elsewhere
+# Met_PSC2WET  Surface pressure for wet air (hPa)
+# Met_SLP      Sea level pressure (hPa)
+# Met_TS       Surface temperature (K)
+# Met_U10M     10 meter windspeed, east-west (m s-1)
+# Met_V10M     10 meter windspeed, north-south (m s-1)
+#
+#==============================================================================
+  StateMetSurf.template:          '%y4%m2%d2_%h2%n2z.nc4',
+  StateMetSurf.frequency:         00000001 000000
+  StateMetSurf.duration:          00000100 000000
+  StateMetSurf.mode:              'time-averaged'
+  StateMetSurf.levels:            1,
+  StateMetSurf.fields:            'Met_FRSEAICE                  ',
+                                  'Met_FRSNO                     ',
+                                  'Met_PHIS                      ',
+                                  'Met_PRECTOT                   ',
+                                  'Met_PSC2WET                   ',
+                                  'Met_AIRDEN                    ',
+                                  'Met_AIRVOL                    ', 
+                                  'Met_SLP                       ', 
+                                  'Met_TS                        ',
+                                  'Met_U10M                      ',
+                                  'Met_V10M                      ',
+::
+#==============================================================================
+# %%%%% THE StateMetMonth COLLECTION %%%%%
+#
+# Used to define monthly meteorology values at all model levels.
+# Units are listed at https://wiki.seas.harvard.edu/geos-chem/index.php/History_collections_for_met_fields_and_related_quantities
+# NOTE: Met_AIRDEN and Met_AIRVOL are with respect to dry air.
+#==============================================================================
+  StateMetMonth.template:          '%y4%m2%d2_%h2%n2z.nc4',
+  StateMetMonth.frequency:         00000100 000000
+  StateMetMonth.duration:          00000100 000000
+  StateMetMonth.mode:              'time-averaged'
+  StateMetMonth.fields:            'Met_PMID                    ',
+                                   'Met_T                       ',
+                                   'Met_SPHU                    ',
+                                   'Met_AIRDEN                  ',
+                                   'Met_AIRVOL                  ',
+                                   'Met_TropHt                  ', # useful to distinguish strat-trop budgets
+                                   'Met_TropLev                 ',
+::
+#==============================================================================
+# %%%%% THE WetLossConv COLLECTION %%%%%
+#
+# Loss of soluble species in convective updrafts
+#
+# Available for all simulations that have soluble species
+#==============================================================================
+  WetLossConv.template:       '%y4%m2%d2_%h2%n2z.nc4',
+  WetLossConv.frequency:      'End'
+  WetLossConv.duration:       'End'
+  WetLossConv.mode:           'instantaneous'
+  WetLossConv.fields:         'WetLossConv_?WET?             ',
+::
+#==============================================================================
+# %%%%% THE WetLossLS COLLECTION %%%%%
+#
+# Loss of soluble species in large-scale wetdep (i.e. rainout and washout)
+#
+# Available for all simulations that have soluble species
+#==============================================================================
+# Loss due to rainout and washout (per deposited species)
+  WetLossLS.template:         '%y4%m2%d2_%h2%n2z.nc4',
+  WetLossLS.frequency:        'End', 
+  WetLossLS.duration:         'End', 
+  WetLossLS.mode:             'instantaneous'
+  WetLossLS.fields:           'WetLossLS_?WET?               ',
+::
+#==============================================================================
+# %%%%% THE BoundaryConditions COLLECTION %%%%%
+#
+# GEOS-Chem boundary conditions for use in nested grid simulations
+#
+# Available for all simulations
+#==============================================================================
+  BoundaryConditions.template:   '%y4%m2%d2_%h2%n2z.nc4',
+  BoundaryConditions.frequency:  00000000 030000
+  BoundaryConditions.duration:   00000001 000000
+  BoundaryConditions.mode:       'instantaneous'
+  BoundaryConditions.fields:     'SpeciesBC_?ADV?             ',
+::
