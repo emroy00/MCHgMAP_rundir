@@ -419,8 +419,8 @@ VerboseOnCores:              root       # Accepted values: root all
 # --- MCHgMAP (FINN) biomass burning (90% Hg0,10% HgP) ---
 #==============================================================================
 (((MCHgMAP_BB_FINN
-0 FINN_Hg0      $MCHgMAPdir/BioBurn_emissions_FINN/Hg_wildfire_monthly_finn_flux_$YYYY$MM.nc Hg0 2010-2020/1-12/1-31/0 RF xy kg/m2/s Hg0 - 1 1
-0 FINN_HgP      $MCHgMAPdir/BioBurn_emissions_FINN/Hg_wildfire_monthly_finn_flux_$YYYY$MM.nc HgP 2010-2020/1-12/1-31/0 RF xy kg/m2/s HgP - 1 1
+0 FINN_Hg0      $MCHgMAPdir/BioBurn_emissions_FINN/Hg_wildfire_monthly_finn_flux_$YYYY$MM.nc Hg0 2010-2020/1-12/1-31/0 C xy kg/m2/s Hg0 - 1 1
+0 FINN_HgP      $MCHgMAPdir/BioBurn_emissions_FINN/Hg_wildfire_monthly_finn_flux_$YYYY$MM.nc HgP 2010-2020/1-12/1-31/0 C xy kg/m2/s HgP - 1 1
 )))MCHgMAP_BB_FINN
 
 ###############################################################################
